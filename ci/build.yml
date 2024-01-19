@@ -1,0 +1,29 @@
+'build':
+  stage: build
+  dependencies: []
+  variables:
+    GRADLE_OPTIONS: --max-workers=2 --no-daemon -s --console=plain
+  before_script:
+    - chmod +x gradlew
+  script:
+    - ./gradlew $GRADLE_OPTIONS clean build
+  artifacts:
+    paths:
+      - build
+    expire_in: 30 mins
+    reports:
+      junit: build/test-results/test/**/TEST-*.xml
+  rules:
+    - if: $CI_COMMIT_TAG
+      when: never
+    - when: on_success
+  extends:
+    - .cache
+
+.cache:
+  cache:
+    key: gradle_cache
+    paths:
+      - .gradle/wrapper
+      - .gradle/caches
+    policy: pull-push

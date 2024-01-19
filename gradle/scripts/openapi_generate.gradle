@@ -1,0 +1,25 @@
+def generatedSourcesDir = "$buildDir/generated-sources"
+
+openApiGenerate {
+    generatorName = "spring"
+    inputSpec = "$projectDir/src/main/resources/META-INF/openapi.json"
+    outputDir = generatedSourcesDir
+    apiPackage = "${project.group}.api"
+    modelPackage = "${project.group}.model"
+    generateModelDocumentation = false
+    generateApiDocumentation = false
+    generateModelTests = false
+    generateApiTests = false
+    templateDir = "$projectDir/src/main/resources/custom-openapi-templates"
+    configOptions = [
+        dateLibrary: "java8",
+        useSpringBoot3: "true",
+        useJakartaEe: "true",
+        interfaceOnly: "true",
+        serializableModel: "true",
+        skipDefaultInterface: "true"
+    ]
+}
+
+compileJava.dependsOn tasks.openApiGenerate
+sourceSets.main.java.srcDir "$generatedSourcesDir/src/main/java"

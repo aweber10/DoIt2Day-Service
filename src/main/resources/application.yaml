@@ -1,0 +1,32 @@
+#Access Token validation (spring security)
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://stargate-playground.caas-t01.telekom.de/auth/realms/default
+          jwk-set-uri: https://stargate-playground.caas-t01.telekom.de/auth/realms/default/protocol/openid-connect/certs
+  application:
+    name: doit2day-service
+
+environment:
+  name: dev
+
+management:
+  health:
+    readinessState:
+      enabled: true
+    livenessState:
+      enabled: true
+  tracing:
+    enabled: true
+    sampling:
+      probability: 1.0
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+  endpoint:
+    health:
+      probes:
+        enabled: true

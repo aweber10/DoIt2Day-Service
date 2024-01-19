@@ -1,0 +1,18 @@
+include:
+  - template: Code-Quality.gitlab-ci.yml
+
+code_quality:
+  variables:
+    CODECLIMATE_PREFIX: "dockerhub.devops.telekom.de/"
+  stage: check
+  needs: ["build"]
+  dependencies: ["build"]
+  image: mtr.devops.telekom.de/cof/docker:20.10.12
+  rules:
+    - if: $ENABLE_CODE_QUALITY == "false"
+      when: never
+    - if: $CI_COMMIT_TAG
+      when: never
+    - when: on_success
+  tags:
+    - otc_run_sysbox_s
